@@ -16,5 +16,6 @@ public class Company {
     private String description;
     private Long numberOfVehicle;
     private Long managerId;
+    private String city;
 
 }
