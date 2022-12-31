@@ -25,8 +25,4 @@ public class CompanyController {
         return new ResponseEntity<>(companyService.updateCompanyInfo(companyUpdateDto), HttpStatus.CREATED);
     }
 
-    @PostMapping("/addVehicle")
-    public ResponseEntity<MessageDto> addModelToCompany(@RequestBody @Validated CompanyAddVehicleModelDto companyAddVehicleModelDto){
-        return new ResponseEntity<>(companyService.addModelToCompany(companyAddVehicleModelDto), HttpStatus.CREATED);
-    }
 }

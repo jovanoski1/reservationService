@@ -8,5 +8,4 @@ import com.CarRent.reservationService.dto.MessageDto;
 public interface CompanyService {
     CompanyDto updateCompanyInfo(CompanyUpdateDto companyUpdateDto);
 
-    MessageDto addModelToCompany(CompanyAddVehicleModelDto companyAddVehicleModelDto);
 }
