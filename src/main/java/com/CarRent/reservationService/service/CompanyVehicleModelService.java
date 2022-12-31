@@ -6,5 +6,5 @@ import com.CarRent.reservationService.dto.MessageDto;
 public interface CompanyVehicleModelService {
     MessageDto addModelToCompany(CompanyAddVehicleModelDto companyAddVehicleModelDto);
 
-    MessageDto delete(Long companyId, Long vehicleId);
+    MessageDto delete(Long id);
 }

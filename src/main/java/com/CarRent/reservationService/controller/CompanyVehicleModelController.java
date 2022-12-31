@@ -27,8 +27,8 @@ public class CompanyVehicleModelController {
     }
 
     @DeleteMapping
-    public ResponseEntity<MessageDto> delete(@RequestBody @Validated CompanyDeleteVehicleModelDto companyDeleteVehicleModelDto){
-        return new ResponseEntity<>(companyVehicleModelService.delete(companyDeleteVehicleModelDto.getCompanyId(), companyDeleteVehicleModelDto.getVehicleModelId()), HttpStatus.OK);
+    public ResponseEntity<MessageDto> delete(@RequestParam @Validated Long id){
+        return new ResponseEntity<>(companyVehicleModelService.delete(id), HttpStatus.OK);
     }
 
 }
