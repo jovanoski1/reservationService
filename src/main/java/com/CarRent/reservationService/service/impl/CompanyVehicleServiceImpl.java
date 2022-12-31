@@ -39,4 +39,13 @@ public class CompanyVehicleServiceImpl implements CompanyVehicleModelService {
 
         return messageDto;
     }
+
+    @Override
+    public MessageDto delete(Long companyId, Long vehicleId) {
+        CompanyVehicleModel companyVehicleModel = companyVehicleModelRepository.findCompanyVehicleModelByCompanyIdAndVehicleModelId(companyId,vehicleId).get();
+        companyVehicleModelRepository.delete(companyVehicleModel);
+        MessageDto messageDto = new MessageDto();
+        messageDto.setMessage("Successfully deleted model from company");
+        return messageDto;
+    }
 }

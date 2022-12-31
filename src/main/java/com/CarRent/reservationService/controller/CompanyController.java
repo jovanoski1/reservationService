@@ -20,7 +20,7 @@ public class CompanyController {
         this.companyService = companyService;
     }
 
-    @PostMapping("/updateCompany")
+    @PutMapping ("/updateCompany")
     public ResponseEntity<CompanyDto> updateCompanyInfo(@RequestBody @Validated CompanyUpdateDto companyUpdateDto) {
         return new ResponseEntity<>(companyService.updateCompanyInfo(companyUpdateDto), HttpStatus.CREATED);
     }
