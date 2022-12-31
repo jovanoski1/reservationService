@@ -2,6 +2,7 @@ package com.CarRent.reservationService.controller;
 
 import com.CarRent.reservationService.dto.CompanyAddVehicleModelDto;
 import com.CarRent.reservationService.dto.CompanyDeleteVehicleModelDto;
+import com.CarRent.reservationService.dto.CompanyVehicleUpdatePriceDto;
 import com.CarRent.reservationService.dto.MessageDto;
 import com.CarRent.reservationService.model.CompanyVehicleModel;
 import com.CarRent.reservationService.repository.CompanyVehicleModelRepository;
@@ -29,6 +30,11 @@ public class CompanyVehicleModelController {
     @DeleteMapping
     public ResponseEntity<MessageDto> delete(@RequestParam @Validated Long id){
         return new ResponseEntity<>(companyVehicleModelService.delete(id), HttpStatus.OK);
+    }
+
+    @PutMapping
+    public ResponseEntity<MessageDto> update(@RequestBody @Validated CompanyVehicleUpdatePriceDto companyVehicleUpdatePriceDto){
+        return new ResponseEntity<>(companyVehicleModelService.updatePrice(companyVehicleUpdatePriceDto), HttpStatus.OK);
     }
 
 }

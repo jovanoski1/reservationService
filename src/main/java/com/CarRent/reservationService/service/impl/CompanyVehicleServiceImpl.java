@@ -1,6 +1,7 @@
 package com.CarRent.reservationService.service.impl;
 
 import com.CarRent.reservationService.dto.CompanyAddVehicleModelDto;
+import com.CarRent.reservationService.dto.CompanyVehicleUpdatePriceDto;
 import com.CarRent.reservationService.dto.MessageDto;
 import com.CarRent.reservationService.model.Company;
 import com.CarRent.reservationService.model.CompanyVehicleModel;
@@ -46,6 +47,15 @@ public class CompanyVehicleServiceImpl implements CompanyVehicleModelService {
         companyVehicleModelRepository.delete(companyVehicleModel);
         MessageDto messageDto = new MessageDto();
         messageDto.setMessage("Successfully deleted model from company");
+        return messageDto;
+    }
+
+    @Override
+    public MessageDto updatePrice(CompanyVehicleUpdatePriceDto companyVehicleUpdatePriceDto) {
+        CompanyVehicleModel companyVehicleModel = companyVehicleModelRepository.findById(companyVehicleUpdatePriceDto.getId()).get();
+        companyVehicleModel.setPricePerDay(companyVehicleUpdatePriceDto.getPrice());
+        MessageDto messageDto = new MessageDto();
+        messageDto.setMessage("Successfully updated price");
         return messageDto;
     }
 }
