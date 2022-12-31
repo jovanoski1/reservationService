@@ -1,7 +1,9 @@
 package com.CarRent.reservationService.controller;
 
+import com.CarRent.reservationService.dto.CompanyAddVehicleModelDto;
 import com.CarRent.reservationService.dto.CompanyDto;
 import com.CarRent.reservationService.dto.CompanyUpdateDto;
+import com.CarRent.reservationService.dto.MessageDto;
 import com.CarRent.reservationService.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,5 +23,10 @@ public class CompanyController {
     @PostMapping("/updateCompany")
     public ResponseEntity<CompanyDto> updateCompanyInfo(@RequestBody @Validated CompanyUpdateDto companyUpdateDto) {
         return new ResponseEntity<>(companyService.updateCompanyInfo(companyUpdateDto), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/addVehicle")
+    public ResponseEntity<MessageDto> addModelToCompany(@RequestBody @Validated CompanyAddVehicleModelDto companyAddVehicleModelDto){
+        return new ResponseEntity<>(companyService.addModelToCompany(companyAddVehicleModelDto), HttpStatus.CREATED);
     }
 }
