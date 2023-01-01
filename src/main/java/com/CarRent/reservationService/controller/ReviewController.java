@@ -24,11 +24,11 @@ public class ReviewController {
 
     @PutMapping
     public ResponseEntity<MessageDto> updateReview(@RequestBody @Validated ReviewUpdateDto reviewUpdateDto){
-        return new ResponseEntity<>(reviewService.update(reviewUpdateDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(reviewService.update(reviewUpdateDto), HttpStatus.OK);
     }
 
     @DeleteMapping
     public ResponseEntity<MessageDto> deleteReview(@RequestBody @Validated ReviewDeleteDto reviewDeleteDto){
-        return new ResponseEntity<>(reviewService.delete(reviewDeleteDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(reviewService.delete(reviewDeleteDto), HttpStatus.OK);
     }
 }
