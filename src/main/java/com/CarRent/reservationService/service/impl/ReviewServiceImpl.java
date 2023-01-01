@@ -2,6 +2,8 @@ package com.CarRent.reservationService.service.impl;
 
 import com.CarRent.reservationService.dto.MessageDto;
 import com.CarRent.reservationService.dto.ReviewCreateDto;
+import com.CarRent.reservationService.dto.ReviewDeleteDto;
+import com.CarRent.reservationService.dto.ReviewUpdateDto;
 import com.CarRent.reservationService.model.Reservation;
 import com.CarRent.reservationService.model.Review;
 import com.CarRent.reservationService.repository.ReservationRepository;
@@ -37,6 +39,34 @@ public class ReviewServiceImpl implements ReviewService {
 
         MessageDto messageDto = new MessageDto();
         messageDto.setMessage("Successfully created review");
+
+        return messageDto;
+    }
+
+    @Override
+    public MessageDto update(ReviewUpdateDto reviewUpdateDto) {
+
+        Review review = reviewRepository.findById(reviewUpdateDto.getReviewId()).get();
+
+        if(reviewUpdateDto.getComment()!=null)review.setComment(reviewUpdateDto.getComment());
+        if(reviewUpdateDto.getRating()!=null)review.setRating(reviewUpdateDto.getRating());
+
+        reviewRepository.save(review);
+
+        MessageDto messageDto = new MessageDto();
+        messageDto.setMessage("Successfully updated review");
+
+        return messageDto;
+    }
+
+    @Override
+    public MessageDto delete(ReviewDeleteDto reviewDeleteDto) {
+        Review review = reviewRepository.findById(reviewDeleteDto.getReviewId()).get();
+        reviewRepository.delete(review);
+
+
+        MessageDto messageDto = new MessageDto();
+        messageDto.setMessage("Successfully deleted review");
 
         return messageDto;
     }
