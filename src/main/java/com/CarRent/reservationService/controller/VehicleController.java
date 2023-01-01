@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/vehicle")
 public class VehicleController {
@@ -31,6 +33,11 @@ public class VehicleController {
     @PutMapping
     public ResponseEntity<MessageDto> updateVehicle(@RequestBody @Validated VehicleUpdateDto vehicleAddDto){
         return new ResponseEntity<>(vehicleService.updateVehicle(vehicleAddDto), HttpStatus.OK);
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<List<AvailableVehicleDto>> getCompanies(@RequestBody @Validated SearchAvailableDto searchAvailableDto) {
+        return new ResponseEntity<>(vehicleService.search(searchAvailableDto), HttpStatus.OK);
     }
 
 

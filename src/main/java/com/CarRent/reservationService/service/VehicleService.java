@@ -1,9 +1,8 @@
 package com.CarRent.reservationService.service;
 
-import com.CarRent.reservationService.dto.MessageDto;
-import com.CarRent.reservationService.dto.VehicleAddDto;
-import com.CarRent.reservationService.dto.VehicleDeleteDto;
-import com.CarRent.reservationService.dto.VehicleUpdateDto;
+import com.CarRent.reservationService.dto.*;
+
+import java.util.List;
 
 public interface VehicleService{
 
@@ -12,4 +11,6 @@ public interface VehicleService{
     MessageDto deleteVehicle(VehicleDeleteDto vehicleDeleteDto);
 
     MessageDto updateVehicle(VehicleUpdateDto vehicleUpdateDto);
+
+    List<AvailableVehicleDto> search(SearchAvailableDto searchAvailableDto);
 }
