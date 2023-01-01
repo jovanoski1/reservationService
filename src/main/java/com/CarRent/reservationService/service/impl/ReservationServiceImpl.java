@@ -3,10 +3,10 @@ package com.CarRent.reservationService.service.impl;
 import com.CarRent.reservationService.dto.MessageDto;
 import com.CarRent.reservationService.dto.ReservationCancelDto;
 import com.CarRent.reservationService.dto.ReservationCreateDto;
-import com.CarRent.reservationService.model.CompanyVehicleModel;
+import com.CarRent.reservationService.model.Company;
 import com.CarRent.reservationService.model.Reservation;
+import com.CarRent.reservationService.model.Vehicle;
 import com.CarRent.reservationService.repository.CompanyRepository;
-import com.CarRent.reservationService.repository.CompanyVehicleModelRepository;
 import com.CarRent.reservationService.repository.ReservationRepository;
 import com.CarRent.reservationService.repository.VehicleModelRepository;
 import com.CarRent.reservationService.service.ReservationService;
@@ -20,26 +20,27 @@ import java.util.concurrent.TimeUnit;
 public class ReservationServiceImpl implements ReservationService {
     private final CompanyRepository companyRepository;
     private final VehicleModelRepository vehicleModelRepository;
-    private final CompanyVehicleModelRepository companyVehicleModelRepository;
     private final ReservationRepository reservationRepository;
 
-    public ReservationServiceImpl(CompanyRepository companyRepository, VehicleModelRepository companyVehicleModelRepository, CompanyVehicleModelRepository companyVehicleModelRepository1, ReservationRepository reservationRepository) {
+    public ReservationServiceImpl(CompanyRepository companyRepository, VehicleModelRepository companyVehicleModelRepository, ReservationRepository reservationRepository) {
         this.companyRepository = companyRepository;
         this.vehicleModelRepository = companyVehicleModelRepository;
-        this.companyVehicleModelRepository = companyVehicleModelRepository1;
         this.reservationRepository = reservationRepository;
     }
 
     @Override
     public MessageDto createReservation(ReservationCreateDto reservationCreateDto) {
 
-        CompanyVehicleModel companyVehicleModel = companyVehicleModelRepository.findById(reservationCreateDto.getCompanyVehicleModelId()).get();
+        Vehicle companyVehicleModel = vehicleModelRepository.findById(reservationCreateDto.getVehicleId()).get();
+        Company company = companyRepository.findById(reservationCreateDto.getCompanyId()).get();
+
 
         Reservation reservation = new Reservation();
         reservation.setUserId(reservationCreateDto.getUserId());
         reservation.setStartDate(reservationCreateDto.getStartDate());
         reservation.setEndDate(reservationCreateDto.getEndDate());
-        reservation.setCompanyVehicleModel(companyVehicleModel);
+        reservation.setCompany(company);
+        reservation.setVehicle(companyVehicleModel);
 
         long diff = Math.abs(reservation.getStartDate().getTime()-reservation.getEndDate().getTime());
         long dayDiff = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1;
@@ -50,7 +51,7 @@ public class ReservationServiceImpl implements ReservationService {
         reservationRepository.save(reservation);
 
         MessageDto messageDto = new MessageDto();
-        messageDto.setMessage("Successfully reserved model "+companyVehicleModel.getVehicleModel().getModel() + " in company "+companyVehicleModel.getCompany().getName());
+        messageDto.setMessage("Successfully reserved model "+ companyVehicleModel.getModel() + " in company "+companyVehicleModel.getCompany().getName());
         return messageDto;
     }
 

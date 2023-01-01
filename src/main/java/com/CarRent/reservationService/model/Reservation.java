@@ -20,14 +20,17 @@ public class Reservation {
     private Date endDate;
     private Long userId;
     @ManyToOne
-    private CompanyVehicleModel companyVehicleModel;
+    private Vehicle vehicle;
+    @ManyToOne
+    private Company company;
     private Long totalPrice;
 
-    public Reservation(Date startDate, Date endDate, Long userId, CompanyVehicleModel companyVehicleModel, Long totalPrice) {
+    public Reservation(Date startDate, Date endDate, Long userId, Vehicle vehicle, Company company, Long totalPrice) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.userId = userId;
-        this.companyVehicleModel = companyVehicleModel;
+        this.vehicle = vehicle;
+        this.company = company;
         this.totalPrice = totalPrice;
     }
 }

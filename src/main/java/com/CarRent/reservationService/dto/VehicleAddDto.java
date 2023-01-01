@@ -5,17 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Date;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReservationCreateDto {
-    private Date startDate;
-    private Date endDate;
-    private Long userId;
-    private Long vehicleId;
+public class VehicleAddDto {
+    private String brand;
+    private String model;
+    private String registration;
+    private Long vehicleTypeId;
     private Long companyId;
-    private Long totalPrice;
+    private Long pricePerDay;
 }

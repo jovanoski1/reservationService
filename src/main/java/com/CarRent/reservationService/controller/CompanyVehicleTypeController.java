@@ -1,10 +1,8 @@
 package com.CarRent.reservationService.controller;
 
 import com.CarRent.reservationService.dto.CompanyAddTypeDto;
-import com.CarRent.reservationService.dto.CompanyAddVehicleModelDto;
 import com.CarRent.reservationService.dto.MessageDto;
 import com.CarRent.reservationService.service.CompanyTypeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

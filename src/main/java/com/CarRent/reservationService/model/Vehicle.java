@@ -10,18 +10,26 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class VehicleModel {
+@Table(indexes = {@Index(columnList = "registration", unique = true)})
+public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String brand;
     private String model;
+    private String registration;
     @ManyToOne
     private VehicleType vehicleType;
+    @ManyToOne
+    private Company company;
+    private Long pricePerDay;
 
-    public VehicleModel(String brand, String model, VehicleType vehicleType) {
+    public Vehicle(String brand, String model, String registration, VehicleType vehicleType, Company company, Long pricePerDay) {
         this.brand = brand;
         this.model = model;
+        this.registration = registration;
         this.vehicleType = vehicleType;
+        this.company = company;
+        this.pricePerDay = pricePerDay;
     }
 }

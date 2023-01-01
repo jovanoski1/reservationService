@@ -5,7 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CompanyDeleteVehicleModelDto {
-    private Long companyId;
-    private Long vehicleModelId;
+public class VehicleDeleteDto {
+    private Long vehicleId;
 }
