@@ -27,6 +27,7 @@ public class CompanyMapper {
     public CompanyDto companyToCompanyDto(Company company){
         CompanyDto companyDto = new CompanyDto();
         companyDto.setId(company.getId());
+        companyDto.setCity(company.getCity());
         companyDto.setDescription(company.getDescription());
         companyDto.setName(company.getName());
         companyDto.setNumberOfVehicle(company.getNumberOfVehicle());

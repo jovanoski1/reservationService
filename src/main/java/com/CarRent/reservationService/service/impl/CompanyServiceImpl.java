@@ -16,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Transactional
 public class CompanyServiceImpl implements CompanyService {
@@ -37,6 +40,24 @@ public class CompanyServiceImpl implements CompanyService {
         Company company = companyMapper.companyUpdateDtoToCompany(companyUpdateDto);
         companyRepository.save(company);
         return companyMapper.companyToCompanyDto(company);
+    }
+
+    @Override
+    public List<String> getAllCities() {
+        List<String> cities = new ArrayList<>();
+
+        for(Company company: companyRepository.findAll()){
+            if(!cities.contains(company.getCity())) cities.add(company.getCity());
+        }
+
+        return cities;
+    }
+
+    @Override
+    public List<CompanyDto> getAllCompanies() {
+        List<CompanyDto> companyDtos = new ArrayList<>();
+        for(Company company: companyRepository.findAll()) companyDtos.add(companyMapper.companyToCompanyDto(company));
+        return companyDtos;
     }
 
 

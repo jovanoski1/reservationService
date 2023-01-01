@@ -9,6 +9,7 @@ public class CompanyDto {
 
     private Long id;
     private String name;
+    private String city;
     private String description;
     private Long numberOfVehicle;
     private Long managerId;

@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/company")
 public class CompanyController {
@@ -24,6 +26,16 @@ public class CompanyController {
     @PutMapping ("/updateCompany")
     public ResponseEntity<CompanyDto> updateCompanyInfo(@RequestBody @Validated CompanyUpdateDto companyUpdateDto) {
         return new ResponseEntity<>(companyService.updateCompanyInfo(companyUpdateDto), HttpStatus.OK);
+    }
+
+    @GetMapping ("/getCities")
+    public ResponseEntity<List<String>> getAllCities() {
+        return new ResponseEntity<>(companyService.getAllCities(), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CompanyDto>> getCompanies() {
+        return new ResponseEntity<>(companyService.getAllCompanies(), HttpStatus.OK);
     }
 
 }
