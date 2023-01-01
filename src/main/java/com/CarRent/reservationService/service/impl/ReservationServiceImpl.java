@@ -1,6 +1,7 @@
 package com.CarRent.reservationService.service.impl;
 
 import com.CarRent.reservationService.dto.MessageDto;
+import com.CarRent.reservationService.dto.ReservationCancelDto;
 import com.CarRent.reservationService.dto.ReservationCreateDto;
 import com.CarRent.reservationService.model.CompanyVehicleModel;
 import com.CarRent.reservationService.model.Reservation;
@@ -50,6 +51,17 @@ public class ReservationServiceImpl implements ReservationService {
 
         MessageDto messageDto = new MessageDto();
         messageDto.setMessage("Successfully reserved model "+companyVehicleModel.getVehicleModel().getModel() + " in company "+companyVehicleModel.getCompany().getName());
+        return messageDto;
+    }
+
+    @Override
+    public MessageDto cancelReservation(ReservationCancelDto reservationCancelDto) {
+        Reservation reservation = reservationRepository.findById(reservationCancelDto.getId()).get();
+        reservationRepository.delete(reservation);
+
+        MessageDto messageDto = new MessageDto();
+        messageDto.setMessage("Successfully canceled reservation");
+
         return messageDto;
     }
 }

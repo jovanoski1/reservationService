@@ -2,16 +2,14 @@ package com.CarRent.reservationService.controller;
 
 import com.CarRent.reservationService.dto.CompanyAddTypeDto;
 import com.CarRent.reservationService.dto.MessageDto;
+import com.CarRent.reservationService.dto.ReservationCancelDto;
 import com.CarRent.reservationService.dto.ReservationCreateDto;
 import com.CarRent.reservationService.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/reservation")
@@ -24,7 +22,12 @@ public class ReservationController {
 
 
     @PostMapping
-    public ResponseEntity<MessageDto> addModelToCompany(@RequestBody @Validated ReservationCreateDto reservationCreateDto){
+    public ResponseEntity<MessageDto> createReservation(@RequestBody @Validated ReservationCreateDto reservationCreateDto){
         return new ResponseEntity<>(reservationService.createReservation(reservationCreateDto), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<MessageDto> cancelReservation(@RequestBody @Validated ReservationCancelDto reservationCancelDto){
+        return new ResponseEntity<>(reservationService.cancelReservation(reservationCancelDto), HttpStatus.OK);
     }
 }
