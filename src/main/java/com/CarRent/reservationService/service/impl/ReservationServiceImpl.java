@@ -1,5 +1,6 @@
 package com.CarRent.reservationService.service.impl;
 
+import com.CarRent.reservationService.Configuration.ClientDto;
 import com.CarRent.reservationService.dto.MessageDto;
 import com.CarRent.reservationService.dto.ReservationCancelDto;
 import com.CarRent.reservationService.dto.ReservationCreateDto;
@@ -10,8 +11,11 @@ import com.CarRent.reservationService.repository.CompanyRepository;
 import com.CarRent.reservationService.repository.ReservationRepository;
 import com.CarRent.reservationService.repository.VehicleModelRepository;
 import com.CarRent.reservationService.service.ReservationService;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.concurrent.TimeUnit;
 
@@ -21,11 +25,13 @@ public class ReservationServiceImpl implements ReservationService {
     private final CompanyRepository companyRepository;
     private final VehicleModelRepository vehicleModelRepository;
     private final ReservationRepository reservationRepository;
+    private final RestTemplate userServiceApiClient;
 
-    public ReservationServiceImpl(CompanyRepository companyRepository, VehicleModelRepository companyVehicleModelRepository, ReservationRepository reservationRepository) {
+    public ReservationServiceImpl(CompanyRepository companyRepository, VehicleModelRepository companyVehicleModelRepository, ReservationRepository reservationRepository, RestTemplate movieServiceApiClient) {
         this.companyRepository = companyRepository;
         this.vehicleModelRepository = companyVehicleModelRepository;
         this.reservationRepository = reservationRepository;
+        this.userServiceApiClient = movieServiceApiClient;
     }
 
     @Override
@@ -46,6 +52,9 @@ public class ReservationServiceImpl implements ReservationService {
         long dayDiff = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1;
 
         //#TODO dodati racunanje popusta
+//        ResponseEntity<ClientDto> userDto = userServiceApiClient.exchange("/api/client/" + company.getManagerId(), HttpMethod.GET,
+//                null, ClientDto.class);
+
         reservation.setTotalPrice(dayDiff*companyVehicleModel.getPricePerDay());
 
         reservationRepository.save(reservation);

@@ -17,5 +17,4 @@ public class ReservationCreateDto {
     private Long userId;
     private Long vehicleId;
     private Long companyId;
-    private Long totalPrice;
 }
