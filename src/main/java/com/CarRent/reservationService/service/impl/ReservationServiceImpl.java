@@ -51,11 +51,10 @@ public class ReservationServiceImpl implements ReservationService {
         long diff = Math.abs(reservation.getStartDate().getTime()-reservation.getEndDate().getTime());
         long dayDiff = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1;
 
-        //#TODO dodati racunanje popusta
-//        ResponseEntity<ClientDto> userDto = userServiceApiClient.exchange("/api/client/" + company.getManagerId(), HttpMethod.GET,
-//                null, ClientDto.class);
+        ResponseEntity<Long> discount = userServiceApiClient.exchange("/api/client/rank/" + reservationCreateDto.getUserId(), HttpMethod.GET,
+                null, Long.class);
 
-        reservation.setTotalPrice(dayDiff*companyVehicleModel.getPricePerDay());
+        reservation.setTotalPrice((long)(dayDiff*companyVehicleModel.getPricePerDay() * (100-discount.getBody())/100));
 
         reservationRepository.save(reservation);
 
