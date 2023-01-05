@@ -1,10 +1,7 @@
 package com.CarRent.reservationService.service.impl;
 
 import com.CarRent.reservationService.Configuration.ClientDto;
-import com.CarRent.reservationService.dto.CarReservationEmailDataDto;
-import com.CarRent.reservationService.dto.MessageDto;
-import com.CarRent.reservationService.dto.ReservationCancelDto;
-import com.CarRent.reservationService.dto.ReservationCreateDto;
+import com.CarRent.reservationService.dto.*;
 import com.CarRent.reservationService.helper.MessageHelper;
 import com.CarRent.reservationService.model.Company;
 import com.CarRent.reservationService.model.Reservation;
@@ -15,6 +12,7 @@ import com.CarRent.reservationService.repository.VehicleModelRepository;
 import com.CarRent.reservationService.service.ReservationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
@@ -83,6 +81,10 @@ public class ReservationServiceImpl implements ReservationService {
         carReservationEmailDataDto.setNotificationType("CAR_RESERVATION_EMAIL");
         jmsTemplate.convertAndSend(destination,messageHelper.createTextMessage(carReservationEmailDataDto));
 
+        ClientUpdateNumberOfRentDaysDto clientUpdateNumberOfRentDaysDto = new ClientUpdateNumberOfRentDaysDto(reservation.getUserId(),dayDiff);
+        ResponseEntity<String> msg = userServiceApiClient.postForEntity("/api/client/increment/", clientUpdateNumberOfRentDaysDto,
+                String.class);
+
 
         MessageDto messageDto = new MessageDto();
         messageDto.setMessage("Successfully reserved model "+ companyVehicleModel.getModel() + " in company "+companyVehicleModel.getCompany().getName());
@@ -102,6 +104,13 @@ public class ReservationServiceImpl implements ReservationService {
         carReservationEmailDataDto.setUserId(reservation.getUserId());
         carReservationEmailDataDto.setNotificationType("CANCEL_CAR_RESERVATION_EMAIL");
         jmsTemplate.convertAndSend(destination,messageHelper.createTextMessage(carReservationEmailDataDto));
+
+        long diff = Math.abs(reservation.getStartDate().getTime()-reservation.getEndDate().getTime());
+        long dayDiff = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1;
+        ClientUpdateNumberOfRentDaysDto clientUpdateNumberOfRentDaysDto = new ClientUpdateNumberOfRentDaysDto(reservation.getUserId(),dayDiff);
+        ResponseEntity<String> msg = userServiceApiClient.postForEntity("/api/client/decrement/", clientUpdateNumberOfRentDaysDto,
+                String.class);
+        System.out.println(dayDiff + " dayDiff");
 
         MessageDto messageDto = new MessageDto();
         messageDto.setMessage("Successfully canceled reservation");
