@@ -2,7 +2,10 @@ package com.CarRent.reservationService.controller;
 
 import com.CarRent.reservationService.dto.CompanyDto;
 import com.CarRent.reservationService.dto.CompanyUpdateDto;
+import com.CarRent.reservationService.security.CheckSecurity;
+import com.CarRent.reservationService.security.service.TokenService;
 import com.CarRent.reservationService.service.CompanyService;
+import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -14,13 +17,17 @@ import java.util.List;
 @RequestMapping("/company")
 public class CompanyController {
     private final CompanyService companyService;
+    private final TokenService tokenService;
 
-    public CompanyController(CompanyService companyService) {
+    public CompanyController(CompanyService companyService, TokenService tokenService) {
         this.companyService = companyService;
+        this.tokenService = tokenService;
     }
 
     @PutMapping ("/updateCompany")
-    public ResponseEntity<CompanyDto> updateCompanyInfo(@RequestBody @Validated CompanyUpdateDto companyUpdateDto) {
+    @CheckSecurity(roles = {"ROLE_MANAGER"})
+    public ResponseEntity<CompanyDto> updateCompanyInfo(@RequestBody @Validated CompanyUpdateDto companyUpdateDto, @RequestHeader String authorization) {
+        companyUpdateDto.setManagerId(tokenService.parseId(authorization));
         return new ResponseEntity<>(companyService.updateCompanyInfo(companyUpdateDto), HttpStatus.OK);
     }
 
