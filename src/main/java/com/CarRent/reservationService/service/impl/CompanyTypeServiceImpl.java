@@ -28,7 +28,7 @@ public class CompanyTypeServiceImpl implements CompanyTypeService {
 
     @Override
     public MessageDto add(CompanyAddTypeDto companyAddTypeDto) {
-        Company company = companyRepository.findById(companyAddTypeDto.getCompanyId()).get();
+        Company company = companyRepository.getCompanyByManagerId(companyAddTypeDto.getManagerId()).get();
         VehicleType vehicleType = vehicleTypeRepository.findById(companyAddTypeDto.getVehicleTypeId()).get();
 
         CompanyVehicleType companyVehicleType = new CompanyVehicleType(company,vehicleType);
@@ -43,7 +43,9 @@ public class CompanyTypeServiceImpl implements CompanyTypeService {
     @Override
     public MessageDto delete(CompanyAddTypeDto companyAddTypeDto) {
 
-        CompanyVehicleType companyVehicleType = companyVehicleTypeRepository.findByVehicleTypeIdAndCompanyId(companyAddTypeDto.getVehicleTypeId(), companyAddTypeDto.getCompanyId()).get();
+        Company company = companyRepository.getCompanyByManagerId(companyAddTypeDto.getManagerId()).get();
+
+        CompanyVehicleType companyVehicleType = companyVehicleTypeRepository.findByVehicleTypeIdAndCompanyId(companyAddTypeDto.getVehicleTypeId(), company.getId()).get();
 
         companyVehicleTypeRepository.delete(companyVehicleType);
 

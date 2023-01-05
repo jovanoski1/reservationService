@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CompanyAddTypeDto {
-    private Long companyId;
+    private Long managerId;
     private Long vehicleTypeId;
 }
