@@ -80,25 +80,30 @@ public class VehicleServiceImpl implements VehicleService {
         List<AvailableVehicleDto> vehicles = new ArrayList<>();
 
         for(Vehicle vehicle : vehicleModelRepository.findAvailableVehicle(searchAvailableDto.getCity(), searchAvailableDto.getCompanyId(), searchAvailableDto.getStartDate(), searchAvailableDto.getEndDate())){
-            System.out.println(vehicle.getModel() + " " + reservationRepository.findAllByVehicleId(vehicle.getId()));
+            System.out.println(vehicle.getModel() + " " + reservationRepository.findAllByVehicleId(vehicle.getId()).size());
             if (reservationRepository.findAllByVehicleId(vehicle.getId()).size() == 0){
                 vehicleToAvailableVehicleDto(vehicles, vehicle);
                 continue;
             }
+            int cnt = 0;
             for(Reservation reservation:reservationRepository.findAllByVehicleId(vehicle.getId())){
-                // pocetak pre pocetka i kraj posle pocetka
-                if(searchAvailableDto.getStartDate().getTime()<reservation.getStartDate().getTime() && searchAvailableDto.getEndDate().getTime()>reservation.getStartDate().getTime()) continue;
-                // pocetak pre pocetka i kraj posle kraja
-                if(searchAvailableDto.getStartDate().getTime()<reservation.getStartDate().getTime() && searchAvailableDto.getEndDate().getTime()>reservation.getEndDate().getTime()) continue;
-                // pocetak posle pocetka i kraj pre kraja
-                if(searchAvailableDto.getStartDate().getTime()> reservation.getStartDate().getTime() && searchAvailableDto.getEndDate().getTime()<reservation.getEndDate().getTime()) continue;
+                System.out.println(reservation.getId());
+                // pocetak pre pocetka i kraj posle pocetka a a1 b b1
+                if(searchAvailableDto.getStartDate().getTime()<=reservation.getStartDate().getTime() && searchAvailableDto.getEndDate().getTime()>=reservation.getStartDate().getTime()) break;
+                // pocetak pre pocetka i kraj posle kraja a a1 b1 b
+                if(searchAvailableDto.getStartDate().getTime()<=reservation.getStartDate().getTime() && searchAvailableDto.getEndDate().getTime()>=reservation.getEndDate().getTime()) break;
+                // pocetak posle pocetka i kraj pre kraja a1 a b b1
+                if(searchAvailableDto.getStartDate().getTime()>= reservation.getStartDate().getTime() && searchAvailableDto.getEndDate().getTime()<=reservation.getEndDate().getTime()) break;
+                // pocetak posle pocetka i kraj posle kraja a a1 b1 b
+                if(searchAvailableDto.getStartDate().getTime()>=reservation.getStartDate().getTime() && searchAvailableDto.getStartDate().getTime()<=reservation.getEndDate().getTime() && searchAvailableDto.getEndDate().getTime()>=reservation.getStartDate().getTime()) break;
 
-                vehicleToAvailableVehicleDto(vehicles, vehicle);
-
-
+                System.out.println("prosao " + vehicle.getModel() + " " + reservation.getId());
+                cnt++;
+                break;
             }
+            if(cnt == reservationRepository.findAllByVehicleId(vehicle.getId()).size())vehicleToAvailableVehicleDto(vehicles, vehicle);
         }
-
+        System.out.println(vehicles.size());
         return vehicles;
     }
 

@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -116,5 +118,25 @@ public class ReservationServiceImpl implements ReservationService {
         messageDto.setMessage("Successfully canceled reservation");
 
         return messageDto;
+    }
+
+    @Override
+    public List<ReservationDto> getReservations(Long id) {
+
+        List<Reservation> reservations = reservationRepository.findAllByUserId(id);
+        List<ReservationDto> res = new ArrayList<>();
+        for(Reservation reservation: reservations){
+            ReservationDto r = new ReservationDto();
+            r.setId(reservation.getId());
+            r.setVehicle(reservation.getVehicle());
+            r.setCompany(reservation.getCompany());
+            r.setTotalPrice(reservation.getTotalPrice());
+            r.setEndDate(reservation.getEndDate());
+            r.setStartDate(reservation.getStartDate());
+            r.setUserId(id);
+            res.add(r);
+        }
+
+        return res;
     }
 }

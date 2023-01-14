@@ -3,6 +3,9 @@ package com.CarRent.reservationService.service;
 import com.CarRent.reservationService.dto.MessageDto;
 import com.CarRent.reservationService.dto.ReservationCancelDto;
 import com.CarRent.reservationService.dto.ReservationCreateDto;
+import com.CarRent.reservationService.dto.ReservationDto;
+
+import java.util.List;
 
 public interface ReservationService {
 
@@ -10,4 +13,5 @@ public interface ReservationService {
 
     MessageDto cancelReservation(ReservationCancelDto reservationCancelDto);
 
+    List<ReservationDto> getReservations(Long id);
 }

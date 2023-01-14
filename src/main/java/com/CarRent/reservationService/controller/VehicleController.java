@@ -36,6 +36,7 @@ public class VehicleController {
     }
 
     @PostMapping("/search")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<List<AvailableVehicleDto>> getCompanies(@RequestBody @Validated SearchAvailableDto searchAvailableDto) {
         return new ResponseEntity<>(vehicleService.search(searchAvailableDto), HttpStatus.OK);
     }

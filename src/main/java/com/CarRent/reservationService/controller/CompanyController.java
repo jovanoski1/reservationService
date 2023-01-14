@@ -32,11 +32,13 @@ public class CompanyController {
     }
 
     @GetMapping ("/getCities")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<List<String>> getAllCities() {
         return new ResponseEntity<>(companyService.getAllCities(), HttpStatus.OK);
     }
 
     @GetMapping
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<List<CompanyDto>> getCompanies() {
         return new ResponseEntity<>(companyService.getAllCompanies(), HttpStatus.OK);
     }
