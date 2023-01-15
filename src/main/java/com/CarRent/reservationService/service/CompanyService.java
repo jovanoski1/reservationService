@@ -11,4 +11,6 @@ public interface CompanyService {
     List<String> getAllCities();
 
     List<CompanyDto> getAllCompanies();
+
+    CompanyDto getCompanyInfo(Long id);
 }

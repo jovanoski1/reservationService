@@ -35,7 +35,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public MessageDto addVehicle(VehicleAddDto vehicleAddDto) {
-        Company company = companyRepository.findById(vehicleAddDto.getCompanyId()).get();
+        Company company = companyRepository.getCompanyByManagerId(vehicleAddDto.getCompanyId()).get();
         VehicleType vehicleType = vehicleTypeRepository.findById(vehicleAddDto.getVehicleTypeId()).get();
 
         Vehicle vehicle = new Vehicle();

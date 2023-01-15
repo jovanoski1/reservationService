@@ -52,5 +52,11 @@ public class CompanyServiceImpl implements CompanyService {
         return companyDtos;
     }
 
+    @Override
+    public CompanyDto getCompanyInfo(Long id) {
+        Company company = companyRepository.getCompanyByManagerId(id).get();
+        return companyMapper.companyToCompanyDto(company);
+    }
+
 
 }

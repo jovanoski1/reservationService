@@ -2,6 +2,7 @@ package com.CarRent.reservationService.service.impl;
 
 import com.CarRent.reservationService.dto.CompanyAddTypeDto;
 import com.CarRent.reservationService.dto.MessageDto;
+import com.CarRent.reservationService.dto.VehicleTypeDto;
 import com.CarRent.reservationService.model.Company;
 import com.CarRent.reservationService.model.CompanyVehicleType;
 import com.CarRent.reservationService.model.VehicleType;
@@ -12,6 +13,9 @@ import com.CarRent.reservationService.service.CompanyTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -53,5 +57,18 @@ public class CompanyTypeServiceImpl implements CompanyTypeService {
         messageDto.setMessage("Successfully deleted type from company");
 
         return messageDto;
+    }
+
+    @Override
+    public List<VehicleTypeDto> getAllTypes() {
+        List<VehicleTypeDto> res = new ArrayList<>();
+        for(VehicleType vehicleType : vehicleTypeRepository.findAll()){
+            VehicleTypeDto typeDto = new VehicleTypeDto();
+            typeDto.setDescription(vehicleType.getDescription());
+            typeDto.setId(vehicleType.getId());
+            typeDto.setType(vehicleType.getType());
+            res.add(typeDto);
+        }
+        return res;
     }
 }

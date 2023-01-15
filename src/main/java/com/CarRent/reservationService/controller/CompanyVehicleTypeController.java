@@ -2,6 +2,7 @@ package com.CarRent.reservationService.controller;
 
 import com.CarRent.reservationService.dto.CompanyAddTypeDto;
 import com.CarRent.reservationService.dto.MessageDto;
+import com.CarRent.reservationService.dto.VehicleTypeDto;
 import com.CarRent.reservationService.security.CheckSecurity;
 import com.CarRent.reservationService.security.service.TokenService;
 import com.CarRent.reservationService.service.CompanyTypeService;
@@ -12,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/companyVehicleType")
@@ -39,5 +42,11 @@ public class CompanyVehicleTypeController {
     public ResponseEntity<MessageDto> delete(@RequestBody @Validated CompanyAddTypeDto companyAddTypeDto, @RequestHeader("Authorization") String authorization){
         companyAddTypeDto.setManagerId(tokenService.parseId(authorization));
         return new ResponseEntity<>(companyTypeService.delete(companyAddTypeDto), HttpStatus.OK);
+    }
+
+    @GetMapping()
+    @CrossOrigin(origins = "http://localhost:3000")
+    public ResponseEntity<List<VehicleTypeDto>> getAllTypes() {
+        return new ResponseEntity<>(companyTypeService.getAllTypes(), HttpStatus.OK);
     }
 }

@@ -1,8 +1,9 @@
 package com.CarRent.reservationService.controller;
 
 import com.CarRent.reservationService.dto.*;
+import com.CarRent.reservationService.security.CheckSecurity;
+import com.CarRent.reservationService.security.service.TokenService;
 import com.CarRent.reservationService.service.VehicleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -15,23 +16,30 @@ import java.util.List;
 public class VehicleController {
 
     private final VehicleService vehicleService;
+    private final TokenService tokenService;
 
-    public VehicleController(VehicleService vehicleService) {
+    public VehicleController(VehicleService vehicleService, TokenService tokenService) {
         this.vehicleService = vehicleService;
+        this.tokenService = tokenService;
     }
 
     @PostMapping
-    public ResponseEntity<MessageDto> addVehicle(@RequestBody @Validated VehicleAddDto vehicleAddDto){
+    @CheckSecurity(roles = {"ROLE_MANAGER"})
+    @CrossOrigin(origins = "http://localhost:3000")
+    public ResponseEntity<MessageDto> addVehicle(@RequestBody @Validated VehicleAddDto vehicleAddDto, @RequestHeader String authorization){
+        vehicleAddDto.setCompanyId(tokenService.parseId(authorization));
         return new ResponseEntity<>(vehicleService.addVehicle(vehicleAddDto), HttpStatus.CREATED);
     }
 
     @DeleteMapping
-    public ResponseEntity<MessageDto> deleteVehicle(@RequestBody @Validated VehicleDeleteDto vehicleAddDto){
+    @CheckSecurity(roles = {"ROLE_MANAGER"})
+    public ResponseEntity<MessageDto> deleteVehicle(@RequestBody @Validated VehicleDeleteDto vehicleAddDto,@RequestHeader String authorization){
         return new ResponseEntity<>(vehicleService.deleteVehicle(vehicleAddDto), HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<MessageDto> updateVehicle(@RequestBody @Validated VehicleUpdateDto vehicleAddDto){
+    @CheckSecurity(roles = {"ROLE_MANAGER"})
+    public ResponseEntity<MessageDto> updateVehicle(@RequestBody @Validated VehicleUpdateDto vehicleAddDto,@RequestHeader String authorization){
         return new ResponseEntity<>(vehicleService.updateVehicle(vehicleAddDto), HttpStatus.OK);
     }
 
