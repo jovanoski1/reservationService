@@ -33,21 +33,29 @@ public class VehicleController {
 
     @DeleteMapping
     @CheckSecurity(roles = {"ROLE_MANAGER"})
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<MessageDto> deleteVehicle(@RequestBody @Validated VehicleDeleteDto vehicleAddDto,@RequestHeader String authorization){
         return new ResponseEntity<>(vehicleService.deleteVehicle(vehicleAddDto), HttpStatus.OK);
     }
 
     @PutMapping
     @CheckSecurity(roles = {"ROLE_MANAGER"})
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<MessageDto> updateVehicle(@RequestBody @Validated VehicleUpdateDto vehicleAddDto,@RequestHeader String authorization){
         return new ResponseEntity<>(vehicleService.updateVehicle(vehicleAddDto), HttpStatus.OK);
     }
 
     @PostMapping("/search")
     @CrossOrigin(origins = "http://localhost:3000")
-    public ResponseEntity<List<AvailableVehicleDto>> getCompanies(@RequestBody @Validated SearchAvailableDto searchAvailableDto) {
+    public ResponseEntity<List<AvailableVehicleDto>> search(@RequestBody @Validated SearchAvailableDto searchAvailableDto) {
         return new ResponseEntity<>(vehicleService.search(searchAvailableDto), HttpStatus.OK);
     }
 
+    @GetMapping("/search")
+    @CrossOrigin(origins = "http://localhost:3000")
+    @CheckSecurity(roles = {"ROLE_MANAGER"})
+    public ResponseEntity<List<VehicleDto>> getCompanyVehicles(@RequestHeader String authorization) {
+        return new ResponseEntity<>(vehicleService.getCompanyVehicles(tokenService.parseId(authorization)), HttpStatus.OK);
+    }
 
 }

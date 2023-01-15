@@ -107,6 +107,19 @@ public class VehicleServiceImpl implements VehicleService {
         return vehicles;
     }
 
+    @Override
+    public List<VehicleDto> getCompanyVehicles(Long id) {
+        Company company = companyRepository.getCompanyByManagerId(id).get();
+
+        List<VehicleDto> vehicles = new ArrayList<>();
+
+        for(Vehicle vehicle : vehicleModelRepository.getAllByCompanyId(company.getId())){
+            VehicleDto vehicleDto = new VehicleDto(vehicle.getId(), vehicle.getBrand(), vehicle.getModel(), vehicle.getRegistration(), vehicle.getVehicleType(), vehicle.getCompany(), vehicle.getPricePerDay());
+            vehicles.add(vehicleDto);
+        }
+        return vehicles;
+    }
+
     private void vehicleToAvailableVehicleDto(List<AvailableVehicleDto> vehicles, Vehicle vehicle) {
         AvailableVehicleDto availableVehicleDto = new AvailableVehicleDto();
         availableVehicleDto.setRegistration(vehicle.getRegistration());

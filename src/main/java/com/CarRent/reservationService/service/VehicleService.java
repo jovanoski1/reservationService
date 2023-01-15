@@ -13,4 +13,6 @@ public interface VehicleService{
     MessageDto updateVehicle(VehicleUpdateDto vehicleUpdateDto);
 
     List<AvailableVehicleDto> search(SearchAvailableDto searchAvailableDto);
+
+    List<VehicleDto> getCompanyVehicles(Long id);
 }

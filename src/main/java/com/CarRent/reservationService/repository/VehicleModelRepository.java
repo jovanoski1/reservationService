@@ -13,4 +13,7 @@ public interface VehicleModelRepository extends JpaRepository<Vehicle, Long> {
 
     @Query(value = "SELECT * FROM reservationServiceDB.vehicle ss JOIN reservationServiceDB.company s ON(ss.company_id=s.id)  WHERE s.city = ?1 AND s.id = ?2", nativeQuery = true)
     List<Vehicle> findAvailableVehicle(String city, Long companyId, Date start, Date end);
+
+    @Query(value = "SELECT * FROM reservationServiceDB.vehicle ss  WHERE ss.company_id = ?1", nativeQuery = true)
+    List<Vehicle> getAllByCompanyId(Long id);
 }
