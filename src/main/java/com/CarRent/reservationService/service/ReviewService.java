@@ -1,9 +1,9 @@
 package com.CarRent.reservationService.service;
 
-import com.CarRent.reservationService.dto.MessageDto;
-import com.CarRent.reservationService.dto.ReviewCreateDto;
-import com.CarRent.reservationService.dto.ReviewDeleteDto;
-import com.CarRent.reservationService.dto.ReviewUpdateDto;
+import com.CarRent.reservationService.dto.*;
+import com.CarRent.reservationService.model.Review;
+
+import java.util.List;
 
 public interface ReviewService {
 
@@ -13,4 +13,7 @@ public interface ReviewService {
 
     MessageDto delete(ReviewDeleteDto reviewDeleteDto);
 
+    List<ReviewDto> getAll(Long id, String city);
+
+    List<AverageRatingDto> getAverageRatings();
 }
