@@ -9,4 +9,6 @@ public class VehicleUpdateDto {
     private Long vehicleId;
     private Long pricePerDay;
     private String registration;
+    private String model;
+    private String brand;
 }

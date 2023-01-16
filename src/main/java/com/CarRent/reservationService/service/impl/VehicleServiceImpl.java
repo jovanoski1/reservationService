@@ -68,7 +68,8 @@ public class VehicleServiceImpl implements VehicleService {
 
         if(vehicleUpdateDto.getRegistration()!=null) vehicle.setRegistration(vehicleUpdateDto.getRegistration());
         if(vehicleUpdateDto.getPricePerDay()!=null) vehicle.setPricePerDay(vehicleUpdateDto.getPricePerDay());
-
+        if(vehicleUpdateDto.getModel()!=null) vehicle.setModel(vehicleUpdateDto.getModel());
+        if(vehicleUpdateDto.getBrand()!=null) vehicle.setBrand(vehicleUpdateDto.getBrand());
         vehicleModelRepository.save(vehicle);
 
         return new MessageDto("Successfully updated vehicle");
