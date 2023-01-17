@@ -14,4 +14,6 @@ public interface ReservationService {
     MessageDto cancelReservation(ReservationCancelDto reservationCancelDto);
 
     List<ReservationDto> getReservations(Long id);
+
+    List<ReservationDto> getReservationsNotReviews(Long id);
 }

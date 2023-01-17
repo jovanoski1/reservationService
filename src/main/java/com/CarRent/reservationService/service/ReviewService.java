@@ -16,4 +16,6 @@ public interface ReviewService {
     List<ReviewDto> getAll(Long id, String city);
 
     List<AverageRatingDto> getAverageRatings();
+
+    List<ReviewDto> getReviewsForUser(Long id);
 }

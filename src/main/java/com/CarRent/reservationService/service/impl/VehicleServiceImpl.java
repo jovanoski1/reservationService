@@ -92,15 +92,16 @@ public class VehicleServiceImpl implements VehicleService {
                 // pocetak pre pocetka i kraj posle pocetka a a1 b b1
                 if(searchAvailableDto.getStartDate().getTime()<=reservation.getStartDate().getTime() && searchAvailableDto.getEndDate().getTime()>=reservation.getStartDate().getTime()) break;
                 // pocetak pre pocetka i kraj posle kraja a a1 b1 b
+                System.out.println("1");
                 if(searchAvailableDto.getStartDate().getTime()<=reservation.getStartDate().getTime() && searchAvailableDto.getEndDate().getTime()>=reservation.getEndDate().getTime()) break;
                 // pocetak posle pocetka i kraj pre kraja a1 a b b1
+                System.out.println("2");
                 if(searchAvailableDto.getStartDate().getTime()>= reservation.getStartDate().getTime() && searchAvailableDto.getEndDate().getTime()<=reservation.getEndDate().getTime()) break;
                 // pocetak posle pocetka i kraj posle kraja a a1 b1 b
                 if(searchAvailableDto.getStartDate().getTime()>=reservation.getStartDate().getTime() && searchAvailableDto.getStartDate().getTime()<=reservation.getEndDate().getTime() && searchAvailableDto.getEndDate().getTime()>=reservation.getStartDate().getTime()) break;
 
                 System.out.println("prosao " + vehicle.getModel() + " " + reservation.getId());
                 cnt++;
-                break;
             }
             if(cnt == reservationRepository.findAllByVehicleId(vehicle.getId()).size())vehicleToAvailableVehicleDto(vehicles, vehicle);
         }

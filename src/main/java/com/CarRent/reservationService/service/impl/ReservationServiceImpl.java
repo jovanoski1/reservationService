@@ -1,18 +1,18 @@
 package com.CarRent.reservationService.service.impl;
 
-import com.CarRent.reservationService.Configuration.ClientDto;
 import com.CarRent.reservationService.dto.*;
 import com.CarRent.reservationService.helper.MessageHelper;
 import com.CarRent.reservationService.model.Company;
 import com.CarRent.reservationService.model.Reservation;
+import com.CarRent.reservationService.model.Review;
 import com.CarRent.reservationService.model.Vehicle;
 import com.CarRent.reservationService.repository.CompanyRepository;
 import com.CarRent.reservationService.repository.ReservationRepository;
+import com.CarRent.reservationService.repository.ReviewRepository;
 import com.CarRent.reservationService.repository.VehicleModelRepository;
 import com.CarRent.reservationService.service.ReservationService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
@@ -29,13 +29,15 @@ public class ReservationServiceImpl implements ReservationService {
     private final CompanyRepository companyRepository;
     private final VehicleModelRepository vehicleModelRepository;
     private final ReservationRepository reservationRepository;
+    private final ReviewRepository reviewRepository;
 
     public ReservationServiceImpl(CompanyRepository companyRepository, VehicleModelRepository vehicleModelRepository,
-                                  ReservationRepository reservationRepository, RestTemplate userServiceApiClient, MessageHelper messageHelper,
+                                  ReservationRepository reservationRepository, ReviewRepository reviewRepository, RestTemplate userServiceApiClient, MessageHelper messageHelper,
                                   JmsTemplate jmsTemplate, @Value("${destination.carRentNotification}") String destination) {
         this.companyRepository = companyRepository;
         this.vehicleModelRepository = vehicleModelRepository;
         this.reservationRepository = reservationRepository;
+        this.reviewRepository = reviewRepository;
         this.userServiceApiClient = userServiceApiClient;
         this.messageHelper = messageHelper;
         this.jmsTemplate = jmsTemplate;
@@ -137,6 +139,38 @@ public class ReservationServiceImpl implements ReservationService {
             res.add(r);
         }
 
+        return res;
+    }
+
+    @Override
+    public List<ReservationDto> getReservationsNotReviews(Long id) {
+        List<Reservation> reservations = reservationRepository.findAllByUserId(id);
+        List<Review>  reviews = reviewRepository.findAll();
+
+        List<ReservationDto> res = new ArrayList<>();
+
+
+        for(Reservation reservation: reservations){
+            boolean exist = false;
+            for(Review review:reviews){
+                if(review.getReservation().getId().equals(reservation.getId())){
+                    exist = true;
+                    break;
+                }
+            }
+            if(!exist){
+                ReservationDto r = new ReservationDto();
+                r.setId(reservation.getId());
+                r.setVehicle(reservation.getVehicle());
+                r.setCompany(reservation.getCompany());
+                r.setTotalPrice(reservation.getTotalPrice());
+                r.setEndDate(reservation.getEndDate());
+                r.setStartDate(reservation.getStartDate());
+                r.setUserId(id);
+                res.add(r);
+            }
+
+        }
         return res;
     }
 }

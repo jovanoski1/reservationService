@@ -107,7 +107,26 @@ public class ReviewServiceImpl implements ReviewService {
 
             avg.add(averageRatingDto);
         }
-
+        avg.sort(new Comparator<AverageRatingDto>() {
+            @Override
+            public int compare(AverageRatingDto o1, AverageRatingDto o2) {
+                if (o1.getAvg() >= o2.getAvg()) return -1;
+                return 1;
+            }
+        });
         return avg;
+    }
+
+    @Override
+    public List<ReviewDto> getReviewsForUser(Long id) {
+        List<ReviewDto> res = new ArrayList<>();
+
+        for(Review review: reviewRepository.findAll()){
+            if(review.getReservation().getUserId().equals(id)){
+                ReviewDto r = new ReviewDto(review.getId(), review.getRating(), review.getComment(), review.getReservation());
+                res.add(r);
+            }
+        }
+        return res;
     }
 }

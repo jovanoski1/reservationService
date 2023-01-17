@@ -45,4 +45,11 @@ public class ReservationController {
         System.out.println(authorization);
         return new ResponseEntity<>(reservationService.getReservations(tokenService.parseId(authorization)), HttpStatus.CREATED);
     }
+
+    @GetMapping("/notReviewed")
+    @CrossOrigin(origins = "http://localhost:3000")
+    public ResponseEntity<List<ReservationDto>> getNoReviewedReservationsForUser(@RequestHeader String authorization){
+        System.out.println(authorization);
+        return new ResponseEntity<>(reservationService.getReservationsNotReviews(tokenService.parseId(authorization)), HttpStatus.CREATED);
+    }
 }
