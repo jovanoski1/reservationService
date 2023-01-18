@@ -1,6 +1,7 @@
 package com.CarRent.reservationService.service.impl;
 
 import com.CarRent.reservationService.dto.*;
+import com.CarRent.reservationService.exception.NotFoundException;
 import com.CarRent.reservationService.helper.MessageHelper;
 import com.CarRent.reservationService.model.Company;
 import com.CarRent.reservationService.model.Reservation;
@@ -11,12 +12,15 @@ import com.CarRent.reservationService.repository.ReservationRepository;
 import com.CarRent.reservationService.repository.ReviewRepository;
 import com.CarRent.reservationService.repository.VehicleModelRepository;
 import com.CarRent.reservationService.service.ReservationService;
+import io.github.resilience4j.retry.Retry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -30,14 +34,16 @@ public class ReservationServiceImpl implements ReservationService {
     private final VehicleModelRepository vehicleModelRepository;
     private final ReservationRepository reservationRepository;
     private final ReviewRepository reviewRepository;
+    private final Retry userServiceRetry;
 
     public ReservationServiceImpl(CompanyRepository companyRepository, VehicleModelRepository vehicleModelRepository,
-                                  ReservationRepository reservationRepository, ReviewRepository reviewRepository, RestTemplate userServiceApiClient, MessageHelper messageHelper,
+                                  ReservationRepository reservationRepository, ReviewRepository reviewRepository, Retry userServiceRetry, RestTemplate userServiceApiClient, MessageHelper messageHelper,
                                   JmsTemplate jmsTemplate, @Value("${destination.carRentNotification}") String destination) {
         this.companyRepository = companyRepository;
         this.vehicleModelRepository = vehicleModelRepository;
         this.reservationRepository = reservationRepository;
         this.reviewRepository = reviewRepository;
+        this.userServiceRetry = userServiceRetry;
         this.userServiceApiClient = userServiceApiClient;
         this.messageHelper = messageHelper;
         this.jmsTemplate = jmsTemplate;
@@ -68,10 +74,9 @@ public class ReservationServiceImpl implements ReservationService {
         long diff = Math.abs(reservation.getStartDate().getTime()-reservation.getEndDate().getTime());
         long dayDiff = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1;
 
-        ResponseEntity<Long> discount = userServiceApiClient.exchange("/api/client/rank/" + reservationCreateDto.getUserId(), HttpMethod.GET,
-                null, Long.class);
+        Long discount = Retry.decorateSupplier(userServiceRetry, ()-> getDiscountForUser(reservationCreateDto.getUserId())).get();
 
-        reservation.setTotalPrice((long)(dayDiff*companyVehicleModel.getPricePerDay() * (100-discount.getBody())/100));
+        reservation.setTotalPrice((long)(dayDiff*companyVehicleModel.getPricePerDay() * (100-discount)/100));
 
         reservationRepository.save(reservation);
 
@@ -94,6 +99,24 @@ public class ReservationServiceImpl implements ReservationService {
         messageDto.setMessage("Successfully reserved model "+ companyVehicleModel.getModel() + " in company "+companyVehicleModel.getCompany().getName());
         return messageDto;
     }
+
+    private Long getDiscountForUser(Long userId) {
+        //get projection from movie service
+        System.out.println("[" + System.currentTimeMillis() / 1000 + "] Getting discount for user id: " + userId);
+        try {
+            Thread.sleep(5000);
+            return userServiceApiClient.exchange("/api/client/rank/" + userId, HttpMethod.GET,
+                    null, Long.class).getBody();
+        } catch (HttpClientErrorException e) {
+            if (e.getStatusCode().equals(HttpStatus.NOT_FOUND))
+                throw new NotFoundException(String.format("User with id: %d not found.", userId));
+            throw new RuntimeException("Internal server error.");
+        } catch (Exception e) {
+//            e.printStackTrace();
+            throw new RuntimeException("Internal server error.");
+        }
+    }
+
 
     @Override
     public MessageDto cancelReservation(ReservationCancelDto reservationCancelDto) {

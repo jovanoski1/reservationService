@@ -98,6 +98,7 @@ public class VehicleServiceImpl implements VehicleService {
                 System.out.println("2");
                 if(searchAvailableDto.getStartDate().getTime()>= reservation.getStartDate().getTime() && searchAvailableDto.getEndDate().getTime()<=reservation.getEndDate().getTime()) break;
                 // pocetak posle pocetka i kraj posle kraja a a1 b1 b
+                System.out.println("3");
                 if(searchAvailableDto.getStartDate().getTime()>=reservation.getStartDate().getTime() && searchAvailableDto.getStartDate().getTime()<=reservation.getEndDate().getTime() && searchAvailableDto.getEndDate().getTime()>=reservation.getStartDate().getTime()) break;
 
                 System.out.println("prosao " + vehicle.getModel() + " " + reservation.getId());
