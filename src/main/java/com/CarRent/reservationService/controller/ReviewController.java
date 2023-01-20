@@ -22,37 +22,31 @@ public class ReviewController {
     }
 
     @PostMapping
-    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<MessageDto> createReview(@RequestBody @Validated ReviewCreateDto reviewCreateDto){
         return new ResponseEntity<>(reviewService.create(reviewCreateDto), HttpStatus.CREATED);
     }
 
     @PutMapping
-    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<MessageDto> updateReview(@RequestBody @Validated ReviewUpdateDto reviewUpdateDto){
         return new ResponseEntity<>(reviewService.update(reviewUpdateDto), HttpStatus.OK);
     }
 
     @DeleteMapping
-    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<MessageDto> deleteReview(@RequestBody @Validated ReviewDeleteDto reviewDeleteDto){
         return new ResponseEntity<>(reviewService.delete(reviewDeleteDto), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/{city}")
-    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<List<ReviewDto>> getAllReviews(@PathVariable Long id, @PathVariable String city){
         return new ResponseEntity<>(reviewService.getAll(id, city), HttpStatus.OK);
     }
 
     @GetMapping("/ratings")
-    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<List<AverageRatingDto>> getAllReviews(){
         return new ResponseEntity<>(reviewService.getAverageRatings(), HttpStatus.OK);
     }
 
     @GetMapping("/userReviews")
-    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<List<ReviewDto>> getUserReviews(@RequestHeader String authorization){
         return new ResponseEntity<>(reviewService.getReviewsForUser(tokenService.parseId(authorization)), HttpStatus.OK);
     }

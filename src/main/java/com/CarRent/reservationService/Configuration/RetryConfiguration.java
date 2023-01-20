@@ -14,7 +14,7 @@ public class RetryConfiguration {
     @Bean
     public Retry userServiceRetry() {
         RetryConfig retryConfig = RetryConfig.custom()
-                .intervalFunction(IntervalFunction.ofExponentialBackoff(2000, 2))
+                .intervalFunction(IntervalFunction.ofExponentialBackoff(500, 2))
                 .maxAttempts(5)
                 .ignoreExceptions(NotFoundException.class)
                 .build();

@@ -26,26 +26,22 @@ public class CompanyController {
 
     @PutMapping ("/updateCompany")
     @CheckSecurity(roles = {"ROLE_MANAGER"})
-    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<CompanyDto> updateCompanyInfo(@RequestBody @Validated CompanyUpdateDto companyUpdateDto, @RequestHeader String authorization) {
         companyUpdateDto.setManagerId(tokenService.parseId(authorization));
         return new ResponseEntity<>(companyService.updateCompanyInfo(companyUpdateDto), HttpStatus.OK);
     }
     @GetMapping ("/getInfo")
     @CheckSecurity(roles = {"ROLE_MANAGER"})
-    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<CompanyDto> getCompanyInfo(@RequestHeader String authorization) {
         return new ResponseEntity<>(companyService.getCompanyInfo(tokenService.parseId(authorization)), HttpStatus.OK);
     }
 
     @GetMapping ("/getCities")
-    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<List<String>> getAllCities() {
         return new ResponseEntity<>(companyService.getAllCities(), HttpStatus.OK);
     }
 
     @GetMapping
-    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<List<CompanyDto>> getCompanies() {
         return new ResponseEntity<>(companyService.getAllCompanies(), HttpStatus.OK);
     }

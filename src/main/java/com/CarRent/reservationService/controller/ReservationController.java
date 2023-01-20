@@ -26,7 +26,6 @@ public class ReservationController {
 
 
     @PostMapping
-    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<MessageDto> createReservation(@RequestBody @Validated ReservationCreateDto reservationCreateDto, @RequestHeader String authorization){
         reservationCreateDto.setUserId(tokenService.parseId(authorization));
         System.out.println(authorization);
@@ -34,20 +33,17 @@ public class ReservationController {
     }
 
     @DeleteMapping
-    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<MessageDto> cancelReservation(@RequestBody @Validated ReservationCancelDto reservationCancelDto){
         return new ResponseEntity<>(reservationService.cancelReservation(reservationCancelDto), HttpStatus.OK);
     }
 
     @GetMapping
-    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<List<ReservationDto>> getReservationsForUser(@RequestHeader String authorization){
         System.out.println(authorization);
         return new ResponseEntity<>(reservationService.getReservations(tokenService.parseId(authorization)), HttpStatus.CREATED);
     }
 
     @GetMapping("/notReviewed")
-    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<List<ReservationDto>> getNoReviewedReservationsForUser(@RequestHeader String authorization){
         System.out.println(authorization);
         return new ResponseEntity<>(reservationService.getReservationsNotReviews(tokenService.parseId(authorization)), HttpStatus.CREATED);
