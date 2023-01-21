@@ -28,7 +28,7 @@ public class NotificationSheduler {
     }
 
 
-    @Scheduled(fixedDelay = 86400, initialDelay = 2000)
+    @Scheduled(fixedDelay = 86400000, initialDelay = 2000)
     void sheduleTask()
     {
         for(Reservation reservation: reservationRepository.findAll()){
@@ -36,7 +36,7 @@ public class NotificationSheduler {
             long diff = Math.abs(reservation.getStartDate().getTime()- sqlDate.getTime());
             long dayDiff = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1;
             System.out.println(dayDiff + " id: " + reservation.getId());
-            if(dayDiff<=3){
+            if(dayDiff==3){
                 ReminderNotificationDto reminderNotificationDto = new ReminderNotificationDto(reservation.getUserId(),"REMINDER_EMAIL");
                 jmsTemplate.convertAndSend(destination,messageHelper.createTextMessage(reminderNotificationDto));
             }
