@@ -129,7 +129,7 @@ public class ReservationServiceImpl implements ReservationService {
         carReservationEmailDataDto.setRegistrationNum(reservation.getVehicle().getRegistration());
         carReservationEmailDataDto.setManagerId(reservation.getCompany().getManagerId());
         carReservationEmailDataDto.setUserId(reservation.getUserId());
-        carReservationEmailDataDto.setNotificationType("CANCEL_CAR_RESERVATION_EMAIL");
+        carReservationEmailDataDto.setNotificationType("CANCEL_RESERVATION_EMAIL");
         jmsTemplate.convertAndSend(destination,messageHelper.createTextMessage(carReservationEmailDataDto));
 
         long diff = Math.abs(reservation.getStartDate().getTime()-reservation.getEndDate().getTime());
